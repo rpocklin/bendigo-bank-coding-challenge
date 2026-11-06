@@ -1,0 +1,16 @@
+sequenceDiagram
+  actor Staff
+  participant Web as Web form
+  participant Server as Internal API
+  participant Mock as External API
+
+  Staff->>Web: Submit currency, amount, term, and risk band
+  Web->>Web: Parse with the shared schema
+  Web->>Server: POST /v1/quotes with x-correlation-id
+  Server->>Server: Validate the body
+  Server->>Mock: POST /v1/quotes with api-key and the same correlation id
+  Mock->>Mock: Accept the key and price the band
+  Mock-->>Server: 200 quote
+  Server->>Server: Parse the response with the shared schema
+  Server-->>Web: 200 quote and Content-Language
+  Web-->>Staff: Show quote id, percent rate, and full-scale commission

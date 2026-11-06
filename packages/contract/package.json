@@ -1,0 +1,26 @@
+{
+  "name": "@quote/contract",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./runtime-env": "./src/runtime-env.ts",
+    "./tls": "./src/tls.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "test": "vitest run",
+    "ci": "yarn typecheck && yarn lint && yarn test"
+  },
+  "dependencies": {
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.0",
+    "@types/node": "24.9.1",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  }
+}

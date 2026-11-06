@@ -1,0 +1,35 @@
+sequenceDiagram
+  actor Staff
+  participant Web as Web form
+  participant Server as Internal API
+  participant Mock as External API
+
+  Staff->>Web: Submit the quote form
+  alt A field fails the shared schema
+    Web-->>Staff: Catalog message on the field
+    Note over Web,Mock: The browser does not call the server
+  else The form is valid
+    Web->>Server: POST /v1/quotes
+    alt The server rejects the body
+      Server-->>Web: 400 invalid_request
+      Web-->>Staff: Catalog message, form still filled
+    else The server accepts the body
+      Server->>Mock: POST /v1/quotes with api-key
+      alt Key missing or wrong, mock error, or unreadable body
+        Mock-->>Server: 401 or 500, or the connection fails
+        Server-->>Web: 500 vendor_unavailable
+        Note over Server: A bad server key is not described as a key problem
+      else The mock does not answer before the deadline
+        Server-->>Web: 504 vendor_timeout
+        Note over Server: One attempt, no retry
+      else The mock returns 429
+        Mock-->>Server: 429 and optional Retry-After
+        Server-->>Web: 429 rate_limited
+      else The mock returns 503
+        Mock-->>Server: 503 and optional Retry-After
+        Server-->>Web: 503 service_unavailable
+        Note over Server: A temporary outage, distinct from vendor_unavailable
+      end
+      Web-->>Staff: Catalog message, form still filled
+    end
+  end

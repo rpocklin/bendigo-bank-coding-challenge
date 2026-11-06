@@ -1,0 +1,26 @@
+flowchart TB
+  contract[packages/contract library]
+
+  subgraph development [Development, three processes]
+    staffDev[Staff browser]
+    web[Web server apps/web :5173]
+    internalDev[Internal API apps/server :4000]
+    externalDev[External API apps/mock-api :3010]
+    staffDev -->|loads the form| web
+    web -->|POST /v1/quotes| internalDev
+    internalDev -->|POST /v1/quotes plus api-key| externalDev
+  end
+
+  subgraph production [Production, two processes]
+    staffProd[Staff browser]
+    internalProd["Web server and internal API apps/server :4443"]
+    externalProd[External API apps/mock-api :3443]
+    staffProd -->|loads the form and POST /v1/quotes| internalProd
+    internalProd -->|POST /v1/quotes plus api-key| externalProd
+  end
+
+  web -.->|imports schemas| contract
+  internalDev -.->|imports schemas| contract
+  externalDev -.->|imports schemas| contract
+  internalProd -.->|imports schemas| contract
+  externalProd -.->|imports schemas| contract

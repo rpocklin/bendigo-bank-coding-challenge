@@ -1,0 +1,7 @@
+{
+  "docs": true,
+  "SERVER_PORT": 4000,
+  "MOCK_API_PORT": 3010,
+  "MOCK_API_BASE_URL": "http://127.0.0.1:3010",
+  "MOCK_API_KEY": "dev-key"
+}

@@ -1,0 +1,9 @@
+{
+  "docs": false,
+  "SERVER_PORT": 4443,
+  "MOCK_API_PORT": 3443,
+  "MOCK_API_BASE_URL": "https://127.0.0.1:3443",
+  "MOCK_API_KEY": "dev-key",
+  "TLS_CERT": "certs/localhost-cert.pem",
+  "TLS_KEY": "certs/localhost-key.pem"
+}
